@@ -5,18 +5,26 @@
  */
 package examen2_francisco;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author Francisco Santos
  */
-public class Albums {
+public class Albums implements Serializable{
     private String nombre,artista;
     private ArrayList<Canciones> listaCanciones = new ArrayList();
 
     public Albums() {
     }
+
+    public Albums(String nombre, String artista) {
+        this.nombre = nombre;
+        this.artista = artista;
+    }
+    
+    
 
     public String getNombre() {
         return nombre;

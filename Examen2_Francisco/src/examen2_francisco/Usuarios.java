@@ -5,13 +5,17 @@
  */
 package examen2_francisco;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 /**
  *
  * @author Francisco Santos
  */
-public class Usuarios {
+public class Usuarios implements Serializable{
      private String nombre, username, password;
      private int edad;
+     ArrayList<PlayList> lista = new ArrayList();
 
     public Usuarios() {
     }
@@ -53,6 +57,11 @@ public class Usuarios {
 
     public void setEdad(int edad) {
         this.edad = edad;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuarios: " + "nombre=" + nombre + ", username=" + username + ", password=" + password + ", edad=" + edad ;
     }
      
      
