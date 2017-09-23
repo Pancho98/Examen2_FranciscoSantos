@@ -6,8 +6,10 @@
 package examen2_francisco;
 
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -108,6 +110,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jt_listarAlbums = new javax.swing.JTable();
+        bt_actualizarAlbum = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jl_eliminarAlbums = new javax.swing.JList<>();
@@ -653,11 +656,11 @@ public class Principal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Album", "Canción", "Artista", "Duración"
+                "Album", "Canción", "Artista"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -666,6 +669,13 @@ public class Principal extends javax.swing.JFrame {
         });
         jScrollPane5.setViewportView(jt_listarAlbums);
 
+        bt_actualizarAlbum.setText("Actualizar");
+        bt_actualizarAlbum.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bt_actualizarAlbumMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -673,18 +683,23 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
-                .addContainerGap(17, Short.MAX_VALUE))
+                    .addComponent(jLabel12)
+                    .addComponent(bt_actualizarAlbum))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(0, 27, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(33, Short.MAX_VALUE)
                 .addComponent(jLabel12)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(bt_actualizarAlbum)
+                .addGap(19, 19, 19))
         );
 
         jTabbedPane2.addTab("Listar Albums", jPanel4);
@@ -861,7 +876,9 @@ public class Principal extends javax.swing.JFrame {
     private void bt_crearAlbumMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearAlbumMouseClicked
         Albums alb = new Albums(tf_nombreAlbum.getText(),tf_artistaAlbum.getText());
         albums.add(alb);
+        CargarCombobox();
         CargarAlbums();
+        CargarCanciones();
     }//GEN-LAST:event_bt_crearAlbumMouseClicked
 
     private void bt_ActualizarListaUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_ActualizarListaUsuariosMouseClicked
@@ -876,7 +893,9 @@ public class Principal extends javax.swing.JFrame {
         Canciones can = new Canciones(tf_nombreCancion.getText(), tf_artistaCancion.getText(), tf_genero.getText(), (Integer)sp_duracion.getValue());
         canciones.add(can);
         for (int i = 0; i < albums.size(); i++) {
-            
+            if (albums.get(i).getNombre().equals(cb_albums.getSelectedItem().toString())) {
+                albums.get(i).setListaCanciones(canciones);
+            }
         }
         CargarCanciones();
     }//GEN-LAST:event_bt_crearCancionMouseClicked
@@ -898,6 +917,15 @@ public class Principal extends javax.swing.JFrame {
         albums.remove(eliminar);
         CargarAlbums();
     }//GEN-LAST:event_bt_eliminarAlbumMouseClicked
+
+    private void bt_actualizarAlbumMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_actualizarAlbumMouseClicked
+        for (int i = 0; i < albums.size(); i++) {
+           Object ob[] = {albums.get(i).getNombre(),albums.get(i).getListaCanciones(),albums.get(i).getArtista()};
+                    DefaultTableModel tabla = (DefaultTableModel)jt_listarAlbums.getModel();
+                    tabla.addRow(ob);
+                    jt_listarAlbums.setModel(tabla);      
+        }
+    }//GEN-LAST:event_bt_actualizarAlbumMouseClicked
 
     public void CargarAlbums(){
         DefaultListModel m = new DefaultListModel();
@@ -930,6 +958,15 @@ public class Principal extends javax.swing.JFrame {
             m.addElement(t);
         }
         jl_listarCanciones.setModel(m);
+    }
+    
+    public void CargarCombobox(){
+        DefaultComboBoxModel m = new DefaultComboBoxModel();
+        
+        for (Albums t : albums) {
+            m.addElement(t);
+        }
+        cb_albums.setModel(m);
     }
     
     public static void main(String args[]) {
@@ -966,6 +1003,7 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bt_ActualizarListaUsuarios;
+    private javax.swing.JButton bt_actualizarAlbum;
     private javax.swing.JButton bt_actualizarListaCanciones;
     private javax.swing.JLabel bt_albums;
     private javax.swing.JLabel bt_canciones;
