@@ -14,86 +14,47 @@ import java.util.ArrayList;
  * @author Francisco Santos
  */
 public class AdminUsuarios {
-    ArrayList<Albums> albums = new ArrayList();
-    ArrayList<Usuarios> usuarios = new ArrayList();
-    File archivo;
+    
+    private ArrayList<Albums> albumes = new ArrayList();
+    private ArrayList<Usuarios> usuarios = new ArrayList();
 
-    public AdminUsuarios() {
-    }
-
-    public AdminUsuarios(String path) {
-        archivo= new File(path);
-    }
-
-    public ArrayList<Albums> getAlbums() {
-        return albums;
-    }
-
-    public void setAlbums(ArrayList<Albums> albums) {
-        this.albums = albums;
-    }
-
-    public ArrayList<Usuarios> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(ArrayList<Usuarios> usuarios) {
+    private File archivo = new File("./Usuarios.cmb");
+    
+    public AdminUsuarios(ArrayList<Albums> albumes, ArrayList<Usuarios> usuarios) {
+        this.albumes = albumes;
         this.usuarios = usuarios;
     }
-
-    public File getArchivo() {
-        return archivo;
-    }
-
-    public void setArchivo(File archivo) {
-        this.archivo = archivo;
-    }
     
-    public void cargarArchivoUsuarios() throws ClassNotFoundException{
+    public void cargar(){
+        FileInputStream f = null;
+        ObjectInputStream a = null;
         try {
-            albums = new ArrayList();
-            Albums temp;
-            usuarios = new ArrayList();
-            Usuarios temp2;
-            if (archivo.exists()) {
-                FileInputStream entrada=new FileInputStream(archivo);
-                ObjectInputStream objeto = new ObjectInputStream(entrada);
-                try {
-                    while((temp=(Albums)objeto.readObject())!=null){
-                        albums.add(temp);
-                    }
-                    while((temp2=(Usuarios)objeto.readObject())!=null){
-                        usuarios.add(temp2);
-                    }
-                } catch (IOException ex) {
-                }
-                objeto.close();
-                entrada.close();
-            }
-        } catch (IOException ex) {
-        }
-    }
-    
-    public void escribirArchivoUsuarios(){
-        FileOutputStream fw = null;
-        ObjectOutputStream bw = null;
-        try {
-            fw= new FileOutputStream(archivo);
-            bw=new ObjectOutputStream(fw);
-            for (Albums t : albums) {
-                bw.writeObject(t);
-            }
-            for (Usuarios t : usuarios) {
-                bw.writeObject(t);
-            }
-            bw.flush();
+            f = new FileInputStream(archivo);
+            a = new ObjectInputStream(f);
+            a.readObject();
         } catch (Exception e) {
-        }finally{
-            try {
-                bw.close();
-                fw.close();
-            } catch (Exception e) {
-            }
+        }
+        try {
+            f.close();
+            a.close();
+        } catch (Exception e) {
         }
     }
+    
+    public void escribirArchivo(){
+        FileOutputStream o = null;
+        ObjectOutputStream a = null;
+        try {
+            o = new FileOutputStream(archivo);
+            a = new ObjectOutputStream(o);
+            a.writeObject(this);
+        } catch (Exception e) {
+        }
+        try {
+            o.close();
+            a.close();
+        } catch (Exception e) {
+        }
+    }
+    
 }
