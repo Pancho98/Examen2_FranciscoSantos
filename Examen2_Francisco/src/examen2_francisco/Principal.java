@@ -875,6 +875,9 @@ public class Principal extends javax.swing.JFrame {
     private void bt_crearCancionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearCancionMouseClicked
         Canciones can = new Canciones(tf_nombreCancion.getText(), tf_artistaCancion.getText(), tf_genero.getText(), (Integer)sp_duracion.getValue());
         canciones.add(can);
+        for (int i = 0; i < albums.size(); i++) {
+            
+        }
         CargarCanciones();
     }//GEN-LAST:event_bt_crearCancionMouseClicked
 
